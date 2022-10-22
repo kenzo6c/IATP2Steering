@@ -2,7 +2,7 @@
 #include "2d/Vector2D.h"
 #include "SteeringBehaviors.h"
 
-#include <iostream>
+class GameWorld;
 
 AgentLeader::AgentLeader(GameWorld* world,
     Vector2D position,
@@ -48,6 +48,7 @@ AgentLeader::AgentLeader(GameWorld* world,
     if (isControllable)
     {
         Steering()->ArriveOn();
+        m_bControllable = true;
     }
     else
     {
@@ -69,9 +70,26 @@ AgentLeader::AgentLeader(GameWorld* world, Vector2D position, bool isControllabl
     if (isControllable)
     {
         Steering()->ArriveOn();
+        m_bControllable = true;
     }
     else
     {
         Steering()->WanderOn();
+    }
+}
+
+void AgentLeader::ChangeControl()
+{
+    if (m_bControllable)
+    {
+        Steering()->ArriveOff();
+        Steering()->WanderOn();
+        m_bControllable = false;
+    }
+    else
+    {
+        Steering()->WanderOff();
+        Steering()->ArriveOn();
+        m_bControllable = true;
     }
 }

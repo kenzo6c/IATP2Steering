@@ -81,8 +81,8 @@ GameWorld::GameWorld(int cx, int cy):
 #define SHOAL
 #ifdef SHOAL
 
-  AgentLeader* pAgentLeader = new AgentLeader(this, Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0), false);
-  m_Vehicles.push_back((Vehicle *) pAgentLeader);
+  m_worldAgentLeader = new AgentLeader(this, Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0), false);
+  m_Vehicles.push_back((Vehicle *) m_worldAgentLeader);
 
    for (int i=0; i<Prm.NumAgents-1; ++i)
   {

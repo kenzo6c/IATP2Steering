@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Vehicle.h"
-#include "GameWorld.h"
 #include "2d/Vector2D.h"
 
 class AgentLeader : Vehicle
 {
+private:
+    bool m_bControllable = false;
 public:
     AgentLeader(GameWorld* world,
         Vector2D position,
@@ -31,5 +32,7 @@ public:
         bool isControllable);
 
     AgentLeader(GameWorld* world, Vector2D position, bool isControllable);
+
+    void ChangeControl();
 };
 
