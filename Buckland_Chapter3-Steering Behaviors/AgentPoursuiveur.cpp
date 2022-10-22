@@ -5,10 +5,10 @@ using namespace std;
 class AgentPoursuiveur
 {
 public:
-	AgentPoursuiveur()
-	{
+	AgentPoursuiveur();
+	//{
 
-	}
+	//}
 	~AgentPoursuiveur();
 
 private:
