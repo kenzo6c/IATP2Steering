@@ -88,9 +88,13 @@ GameWorld::GameWorld(int cx, int cy):
     m_pCellSpace->AddEntity(pVehicle);
   }
 
-  //setup the agents
-  for (int a = 0; a < 5; ++a)
+  //setup the protecting agents
+  int numProtectingAgents = 20;
+  for (int a = 0; a < numProtectingAgents; ++a)
   {
+      double angle = (TwoPi / numProtectingAgents) * a;
+      double radius = 50;
+
       //float = f
       //determine a random starting position
       Vector2D SpawnPos = Vector2D(300, 300);
@@ -105,11 +109,8 @@ GameWorld::GameWorld(int cx, int cy):
           Prm.MaxTurnRatePerSecond,         //max turn rate
           Prm.VehicleScale,                 //scale
           (Vehicle*) m_worldAgentLeader,    //aimed vehicle
-          Vector2D(-30, 0));                //offset
-      pVehicle->Steering()->SeparationOn();
+          Vector2D(std::cos(angle) * radius, std::sin(angle) * radius));                //offset
       v = (Vehicle*)pVehicle;
-
-
 
       m_Vehicles.push_back(pVehicle);
 
