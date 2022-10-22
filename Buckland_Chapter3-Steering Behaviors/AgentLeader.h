@@ -3,7 +3,7 @@
 #include "Vehicle.h"
 #include "2d/Vector2D.h"
 
-class AgentLeader : Vehicle
+class AgentLeader : public Vehicle
 {
 private:
     bool m_bControllable = false;
