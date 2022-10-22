@@ -36,6 +36,7 @@ GameWorld::GameWorld(int cx, int cy):
             m_bShowFeelers(false),
             m_bShowDetectionBox(false),
             m_bShowFPS(true),
+            m_bControllable(false),
             m_dAvFrameTime(0),
             m_pPath(NULL),
             m_bRenderNeighbors(false),
@@ -81,7 +82,7 @@ GameWorld::GameWorld(int cx, int cy):
 #define SHOAL
 #ifdef SHOAL
 
-  m_worldAgentLeader = new AgentLeader(this, Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0), false);
+  m_worldAgentLeader = new AgentLeader(this, Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0), m_bControllable);
   m_Vehicles.push_back((Vehicle *) m_worldAgentLeader);
 
    for (int i=0; i<Prm.NumAgents-1; ++i)
@@ -513,6 +514,28 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
       }
 
       break;
+
+      case ID_CONTROLLABLE:
+
+          m_bControllable = !m_bControllable;
+
+          if (m_bControllable)
+          {
+              m_worldAgentLeader->ChangeControl();
+
+              //check the menu
+              ChangeMenuState(hwnd, ID_CONTROLLABLE, MFS_CHECKED);
+          }
+
+          else
+          {
+              m_worldAgentLeader->ChangeControl();
+
+              //uncheck the menu
+              ChangeMenuState(hwnd, ID_CONTROLLABLE, MFS_UNCHECKED);
+          }
+
+          break;
       
   }//end switch
 }

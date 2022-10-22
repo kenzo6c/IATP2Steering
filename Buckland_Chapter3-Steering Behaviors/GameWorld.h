@@ -77,6 +77,7 @@ private:
   bool  m_bRenderNeighbors;
   bool  m_bViewKeys;
   bool  m_bShowCellSpaceInfo;
+  bool  m_bControllable;
 
 
   void CreateObstacles();
