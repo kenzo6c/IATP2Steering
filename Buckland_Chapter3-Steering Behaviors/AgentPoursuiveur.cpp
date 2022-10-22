@@ -11,8 +11,9 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
     double    max_speed,
     double    max_turn_rate,
     double    scale,
-    Vehicle* nextVehicle) : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale) 
+    Vehicle* nextVehicle,
+    Vector2D offset) : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale) 
 {
-    Vehicle::Steering()->OffsetPursuitOn(nextVehicle, Vector2D(1,1));
+    Vehicle::Steering()->OffsetPursuitOn(nextVehicle, offset);
 }
 

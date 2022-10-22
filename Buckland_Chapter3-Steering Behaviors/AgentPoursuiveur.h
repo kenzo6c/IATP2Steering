@@ -15,7 +15,9 @@ public:
         double    max_force,
         double    max_speed,
         double    max_turn_rate,
-        double    scale, Vehicle* nextVehicle);
+        double    scale,
+        Vehicle* nextVehicle,
+        Vector2D offset);
 
 private:
     vector<Vehicle*> m_vehicles;

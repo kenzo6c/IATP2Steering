@@ -66,18 +66,6 @@ GameWorld::GameWorld(int cx, int cy):
     //determine a random starting position
     Vector2D SpawnPos = Vector2D(200,200);
 
-
-    /*Vehicle* pVehicle = new Vehicle(this,
-                                    SpawnPos,                 //initial position
-                                    RandFloat()*TwoPi,        //start rotation
-                                    Vector2D(0,0),            //velocity
-                                    Prm.VehicleMass,          //mass
-                                    Prm.MaxSteeringForce,     //max force
-                                    Prm.MaxSpeed,             //max velocity
-                                    Prm.MaxTurnRatePerSecond, //max turn rate
-                                    Prm.VehicleScale);        //scale*/
-
-
     AgentPoursuiveur* pVehicle = new AgentPoursuiveur(this,
         SpawnPos,                 //initial position
         RandFloat() * TwoPi,        //start rotation
@@ -86,11 +74,11 @@ GameWorld::GameWorld(int cx, int cy):
         Prm.MaxSteeringForce,     //max force
         Prm.MaxSpeed,             //max velocity
         Prm.MaxTurnRatePerSecond, //max turn rate
-        Prm.VehicleScale, v);        //scale
+        Prm.VehicleScale,
+        v,
+        Vector2D(-10, 0));        //scale
 
     v = (Vehicle*)pVehicle;
-
-    //pVehicle->Steering()->FlockingOn();
 
     m_Vehicles.push_back(pVehicle);
 
@@ -98,11 +86,37 @@ GameWorld::GameWorld(int cx, int cy):
     m_pCellSpace->AddEntity(pVehicle);
   }
 
+  ////setup the agents
+  //for (int a = 0; a < 5; ++a)
+  //{
+
+  //    //determine a random starting position
+  //    Vector2D SpawnPos = Vector2D(200, 200);
+
+  //    AgentPoursuiveur* pVehicle = new AgentPoursuiveur(this,
+  //        SpawnPos,                 //initial position
+  //        RandFloat() * TwoPi,        //start rotation
+  //        Vector2D(0, 0),            //velocity
+  //        0.2,          //mass
+  //        Prm.MaxSteeringForce,     //max force
+  //        Prm.MaxSpeed,             //max velocity
+  //        Prm.MaxTurnRatePerSecond, //max turn rate
+  //        Prm.VehicleScale,
+  //        (Vehicle*) m_worldAgentLeader);        //scale
+
+  //    m_Vehicles.push_back(pVehicle);
+
+  //    //add it to the cell subdivision
+  //    m_pCellSpace->AddEntity(pVehicle);
+  //}
+
  
   //create any obstacles or walls
   //CreateObstacles();
   //CreateWalls();
 }
+
+
 
 
 //-------------------------------- dtor ----------------------------------
