@@ -21,6 +21,7 @@
 #include "BaseGameEntity.h"
 #include "EntityFunctionTemplates.h"
 #include "vehicle.h"
+#include "AgentLeader.h"
 
 
 class Obstacle;
@@ -59,7 +60,9 @@ private:
   Vector2D                      m_vCrosshair;
 
   //keeps track of the average FPS
-  double                         m_dAvFrameTime;
+  double                        m_dAvFrameTime;
+
+  AgentLeader* m_worldAgentLeader;
 
 
   //flags to turn aids and obstacles etc on/off
@@ -74,6 +77,7 @@ private:
   bool  m_bRenderNeighbors;
   bool  m_bViewKeys;
   bool  m_bShowCellSpaceInfo;
+  bool  m_bControllable;
 
 
   void CreateObstacles();
@@ -141,6 +145,8 @@ public:
   
   void  ToggleViewKeys(){m_bViewKeys = !m_bViewKeys;}
   bool  ViewKeys()const{return m_bViewKeys;}
+
+  AgentLeader* getAgentLeader() const { return m_worldAgentLeader; }
 
 };
 

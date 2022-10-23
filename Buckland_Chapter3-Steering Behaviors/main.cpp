@@ -123,6 +123,11 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
                g_GameWorld = new GameWorld(cxClient, cyClient);
             }
 
+          case 'C':
+          {
+              g_GameWorld->getAgentLeader()->ChangeControl();
+          }
+
             break;
            
 

@@ -11,6 +11,7 @@
 #include "ParamLoader.h"
 #include "misc/WindowUtils.h"
 #include "misc/Stream_Utility_Functions.h"
+#include "AgentLeader.h"
 
 
 #include "resource.h"
@@ -35,6 +36,7 @@ GameWorld::GameWorld(int cx, int cy):
             m_bShowFeelers(false),
             m_bShowDetectionBox(false),
             m_bShowFPS(true),
+            m_bControllable(false),
             m_dAvFrameTime(0),
             m_pPath(NULL),
             m_bRenderNeighbors(false),
@@ -49,7 +51,7 @@ GameWorld::GameWorld(int cx, int cy):
   m_pPath = new Path(5, border, border, cx-border, cy-border, true); 
 
   //setup the agents
-  for (int a=0; a<Prm.NumAgents; ++a)
+  for (int a=0; a<Prm.NumAgents - 1; ++a)
   {
 
     //determine a random starting position
@@ -67,9 +69,10 @@ GameWorld::GameWorld(int cx, int cy):
                                     Prm.MaxTurnRatePerSecond, //max turn rate
                                     Prm.VehicleScale);        //scale
 
-    pVehicle->Steering()->ArriveOn();
+    //pVehicle->Steering()->FlockingOn();
 
     m_Vehicles.push_back(pVehicle);
+    pVehicle->SetMaxSpeed(200);
 
     //add it to the cell subdivision
     m_pCellSpace->AddEntity(pVehicle);
@@ -78,15 +81,19 @@ GameWorld::GameWorld(int cx, int cy):
 
 #define SHOAL
 #ifdef SHOAL
-  m_Vehicles[Prm.NumAgents-1]->Steering()->FlockingOff();
-  m_Vehicles[Prm.NumAgents-1]->SetScale(Vector2D(10, 10));
-  m_Vehicles[Prm.NumAgents-1]->Steering()->WanderOn();
-  m_Vehicles[Prm.NumAgents-1]->SetMaxSpeed(70);
 
+  m_worldAgentLeader = new AgentLeader(this, Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0), m_bControllable);
+  m_Vehicles.push_back((Vehicle *) m_worldAgentLeader);
 
    for (int i=0; i<Prm.NumAgents-1; ++i)
   {
-    m_Vehicles[i]->Steering()->EvadeOn(m_Vehicles[Prm.NumAgents-1]);
+       if (i % 2)
+       {
+           m_Vehicles[i]->Steering()->OffsetPursuitOn(m_Vehicles[Prm.NumAgents - 1], Vector2D(-i - 1, i + 1));
+       }
+       else {
+           m_Vehicles[i]->Steering()->OffsetPursuitOn(m_Vehicles[Prm.NumAgents - 1], Vector2D(-i - 1, -i - 1));
+       }
 
   }
 #endif
@@ -507,6 +514,28 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
       }
 
       break;
+
+      case ID_CONTROLLABLE:
+
+          m_bControllable = !m_bControllable;
+
+          if (m_bControllable)
+          {
+              m_worldAgentLeader->ChangeControl();
+
+              //check the menu
+              ChangeMenuState(hwnd, ID_CONTROLLABLE, MFS_CHECKED);
+          }
+
+          else
+          {
+              m_worldAgentLeader->ChangeControl();
+
+              //uncheck the menu
+              ChangeMenuState(hwnd, ID_CONTROLLABLE, MFS_UNCHECKED);
+          }
+
+          break;
       
   }//end switch
 }

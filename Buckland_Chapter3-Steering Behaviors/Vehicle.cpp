@@ -43,7 +43,6 @@ Vehicle::Vehicle(GameWorld* world,
 
   //set up the smoother
   m_pHeadingSmoother = new Smoother<Vector2D>(Prm.NumSamplesForSmoothing, Vector2D(0.0, 0.0)); 
-  
  
 }
 
