@@ -34,7 +34,8 @@ Vehicle::Vehicle(GameWorld* world,
                                        m_pWorld(world),
                                        m_vSmoothedHeading(Vector2D(0,0)),
                                        m_bSmoothingOn(false),
-                                       m_dTimeElapsed(0.0)
+                                       m_dTimeElapsed(0.0),
+                                       overrideColor(-1)
 {  
   InitializeBuffer();
 
@@ -159,6 +160,22 @@ void Vehicle::Render()
                                          Heading(),
                                          Side(),
                                          Scale());
+  }
+
+
+  switch (overrideColor)
+  {
+      case 0:
+          gdi->RedPen();
+          break;
+      case 1:
+          gdi->DarkGreenPen();
+          break;
+      case 2:
+          gdi->BluePen();
+          break;
+      default:
+          break;
   }
 
 

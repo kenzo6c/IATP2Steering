@@ -81,7 +81,8 @@ private:
   bool  m_bViewKeys;
   bool  m_bShowCellSpaceInfo;
   bool  m_bControllable;
-  bool  m_bProtectingAgentsCreated = false;
+  bool  m_bProtectingAgentsCreated;
+  bool  m_bVformation;
 
 
   void CreateObstacles();
@@ -95,6 +96,8 @@ public:
   GameWorld(int cx, int cy);
 
   ~GameWorld();
+
+  void ChangeFormation();
 
   void ChangeControl();
 

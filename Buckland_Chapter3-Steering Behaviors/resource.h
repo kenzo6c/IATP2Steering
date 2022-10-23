@@ -19,6 +19,7 @@
 #define ID_MENU_SMOOTHING               40014
 #define IDM_PARTITION_VIEW_NEIGHBORS    40015
 #define ID_CONTROLLABLE					40016
+#define ID_VFORMATION					40017
 
 // Next default values for new objects
 // 

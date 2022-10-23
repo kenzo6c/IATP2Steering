@@ -53,9 +53,10 @@ BEGIN
     BEGIN
         MENUITEM "On/Off",                      ID_MENU_SMOOTHING
     END
-    POPUP "Leader"
+    POPUP "Controls"
     BEGIN
-        MENUITEM "Controllable"                 ID_CONTROLLABLE
+        MENUITEM "Control Leader"               ID_CONTROLLABLE
+        MENUITEM "V Formation"                  ID_VFORMATION
     END
 END
 

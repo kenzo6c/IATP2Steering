@@ -112,23 +112,30 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
            case VK_ESCAPE:
             {             
               SendMessage(hwnd, WM_DESTROY, NULL, NULL);
+              break;
             }
-          
-            break;
+     
 
           case 'R':
             {
                delete g_GameWorld;
            
                g_GameWorld = new GameWorld(cxClient, cyClient);
+               break;
             }
 
           case 'C':
           {
               g_GameWorld->ChangeControl();
+              break;
+
           }
 
-            break;
+          case 'V':
+          {
+              g_GameWorld->ChangeFormation();
+              break;
+          }
            
 
         }//end switch

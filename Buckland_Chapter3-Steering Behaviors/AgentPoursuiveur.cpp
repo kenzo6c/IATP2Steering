@@ -12,8 +12,10 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
     double    max_turn_rate,
     double    scale,
     Vehicle* nextVehicle,
-    Vector2D offset) : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale), m_offset(offset)
+    Vector2D offset,
+    int color) : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale), m_offset(offset)
 {
+    overrideColor = color;
     Steering()->OffsetPursuitOn(nextVehicle, offset);
 }
 
@@ -28,4 +30,11 @@ void AgentPoursuiveur::FollowVehicle(Vehicle* nextVehicle)
     Steering()->WanderOff();
     Steering()->OffsetPursuitOff();
     Steering()->OffsetPursuitOn(nextVehicle, m_offset);
+}
+
+void AgentPoursuiveur::FollowVehicle(Vehicle* nextVehicle, Vector2D offset)
+{
+    Steering()->WanderOff();
+    Steering()->OffsetPursuitOff();
+    Steering()->OffsetPursuitOn(nextVehicle, offset);
 }

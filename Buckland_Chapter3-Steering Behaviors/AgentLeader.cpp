@@ -15,6 +15,7 @@ AgentLeader::AgentLeader(GameWorld* world,
     double    scale)
     : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale)
 {
+    overrideColor = 2;
     Steering()->WanderOn();
 }
 
@@ -29,6 +30,7 @@ AgentLeader::AgentLeader(GameWorld* world, Vector2D position)
         Prm.MaxTurnRatePerSecond,
         10)
 {
+    overrideColor = 2;
     Steering()->WanderOn();
 }
 
@@ -45,6 +47,7 @@ AgentLeader::AgentLeader(GameWorld* world,
     bool isControllable)
     : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale)
 {
+    overrideColor = 2;
     if (isControllable)
     {
         Steering()->ArriveOn();
@@ -67,6 +70,7 @@ AgentLeader::AgentLeader(GameWorld* world, Vector2D position, bool isControllabl
         Prm.MaxTurnRatePerSecond,
         10)
 {
+    overrideColor = 2;
     if (isControllable)
     {
         Steering()->ArriveOn();

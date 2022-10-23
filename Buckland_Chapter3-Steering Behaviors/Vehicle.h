@@ -63,6 +63,9 @@ private:
   Vehicle(const Vehicle&);
   Vehicle& operator=(const Vehicle&);
 
+protected:
+    int overrideColor;
+
 
 public:
 

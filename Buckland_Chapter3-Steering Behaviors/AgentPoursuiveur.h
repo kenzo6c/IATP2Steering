@@ -19,11 +19,14 @@ public:
         double    max_turn_rate,
         double    scale,
         Vehicle* nextVehicle,
-        Vector2D offset);
+        Vector2D offset,
+        int color);
 
     void Free();
 
     void FollowVehicle(Vehicle* nextVehicle);
+
+    void FollowVehicle(Vehicle* nextVehicle, Vector2D offset);
 
 private:
     Vector2D m_offset;

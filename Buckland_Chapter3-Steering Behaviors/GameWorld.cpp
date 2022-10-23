@@ -43,7 +43,9 @@ GameWorld::GameWorld(int cx, int cy):
             m_pPath(NULL),
             m_bRenderNeighbors(false),
             m_bViewKeys(false),
-            m_bShowCellSpaceInfo(false)
+            m_bShowCellSpaceInfo(false),
+            m_bProtectingAgentsCreated(false),
+            m_bVformation(false)
 {
 
   //setup the spatial subdivision class
@@ -61,6 +63,7 @@ GameWorld::GameWorld(int cx, int cy):
 
   Vehicle* v = (Vehicle*)m_worldAgentLeader;
 
+  gdi->RedPen();
   //setup the agents
   for (int a=0; a<Prm.NumAgents - 1; ++a)
   {
@@ -76,9 +79,10 @@ GameWorld::GameWorld(int cx, int cy):
         Prm.MaxSteeringForce,     //max force
         Prm.MaxSpeed,             //max velocity
         Prm.MaxTurnRatePerSecond, //max turn rate
-        Prm.VehicleScale,
+        Prm.VehicleScale,         //scale
         v,
-        Vector2D(-10, 0));        //scale
+        Vector2D(-10, 0),
+        0);
 
     v = (Vehicle*)pVehicle;
 
@@ -113,11 +117,48 @@ GameWorld::~GameWorld()
   delete m_pPath;
 }
 
+//----------------------------- Change the formation of the following agents -----------------------------------
+//--------------------------------------------------------------------------------------------------------------
+void GameWorld::ChangeFormation()
+{
+    int gap = 3;
+    if (!m_bVformation)
+    {
+        for (int i = 0; i < m_FollowingAgents.size(); i++)
+        {
+            int middle = m_FollowingAgents.size() / 2;
+            m_FollowingAgents[0]->FollowVehicle(m_worldAgentLeader, Vector2D(-gap, gap));
+            for (int i = 1; i < middle; i++)
+            {
+                m_FollowingAgents[i]->FollowVehicle(m_FollowingAgents[i - 1], Vector2D(-gap, gap));
+            }
 
+            m_FollowingAgents[middle]->FollowVehicle(m_worldAgentLeader, Vector2D(-gap, -gap));
+            for (int i = middle + 1; i < m_FollowingAgents.size(); i++)
+            {
+                m_FollowingAgents[i]->FollowVehicle(m_FollowingAgents[i - 1], Vector2D(-gap, -gap));
+            }
+        }
+        m_bVformation = true;
+    }
+    else
+    {
+        m_FollowingAgents[0]->FollowVehicle(m_worldAgentLeader);
+        for (int i = 1; i < m_FollowingAgents.size(); i++)
+        {
+            m_FollowingAgents[i]->FollowVehicle(m_FollowingAgents[i-1]);
+        }
+        m_bVformation = false;
+    }
+}
+
+
+//----------------------------- Enable/Disable Control of the Leader & Protecting agents -----------------------------------
+//--------------------------------------------------------------------------------------------------------------------------
 void GameWorld::ChangeControl()
 {
     m_worldAgentLeader->ChangeControl();
-    if (m_bControllable)
+    if (!m_bControllable)
     {
         if (!m_bProtectingAgentsCreated)
         {
@@ -131,6 +172,7 @@ void GameWorld::ChangeControl()
                 m_ProtectingAgents[i]->FollowVehicle(m_worldAgentLeader);
             }
         }
+        m_bControllable = true;
     }
     else
     {
@@ -141,14 +183,18 @@ void GameWorld::ChangeControl()
                 m_ProtectingAgents[i]->Free();
             }
         }
+        m_bControllable = false;
     }
 }
 
 
+//----------------------------- Create Agents protecting the Leader -----------------------------------
+//-----------------------------------------------------------------------------------------------------
 void GameWorld::CreateProtectingAgents()
 {
     //setup the protecting agents
     int numProtectingAgents = 20;
+    gdi->GreenPen();
     for (int a = 0; a < numProtectingAgents; ++a)
     {
         double angle = (TwoPi / numProtectingAgents) * a;
@@ -168,7 +214,7 @@ void GameWorld::CreateProtectingAgents()
             Prm.MaxTurnRatePerSecond,         //max turn rate
             Prm.VehicleScale,                 //scale
             (Vehicle*)m_worldAgentLeader,    //aimed vehicle
-            Vector2D(std::cos(angle) * radius, std::sin(angle) * radius));                //offset
+            Vector2D(std::cos(angle) * radius, std::sin(angle) * radius), 1);                //offset
 
         m_Vehicles.push_back(pVehicle);
         m_ProtectingAgents.push_back(pVehicle);
@@ -572,9 +618,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
       case ID_CONTROLLABLE:
 
-          m_bControllable = !m_bControllable;
-
-          if (m_bControllable)
+          if (!m_bControllable)
           {
               ChangeControl();
 
@@ -591,6 +635,28 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
           }
 
           break;
+       
+      case ID_VFORMATION:
+
+          if (!m_bVformation)
+          {
+              ChangeFormation();
+
+              //check the menu
+              ChangeMenuState(hwnd, ID_VFORMATION, MFS_CHECKED);
+          }
+
+          else
+          {
+              ChangeFormation();
+
+              //uncheck the menu
+              ChangeMenuState(hwnd, ID_VFORMATION, MFS_UNCHECKED);
+          }
+
+          break;
+
+
       
   }//end switch
 }
