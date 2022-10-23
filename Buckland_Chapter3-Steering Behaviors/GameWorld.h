@@ -22,6 +22,7 @@
 #include "EntityFunctionTemplates.h"
 #include "vehicle.h"
 #include "AgentLeader.h"
+#include "AgentPoursuiveur.h"
 
 
 class Obstacle;
@@ -38,6 +39,8 @@ private:
 
   //a container of all the moving entities
   std::vector<Vehicle*>         m_Vehicles;
+
+  std::vector<AgentPoursuiveur*> m_ProtectingAgents;
 
   //any obstacles
   std::vector<BaseGameEntity*>  m_Obstacles;
@@ -78,6 +81,7 @@ private:
   bool  m_bViewKeys;
   bool  m_bShowCellSpaceInfo;
   bool  m_bControllable;
+  bool  m_bProtectingAgentsCreated = false;
 
 
   void CreateObstacles();
@@ -91,6 +95,10 @@ public:
   GameWorld(int cx, int cy);
 
   ~GameWorld();
+
+  void ChangeControl();
+
+  void CreateProtectingAgents();
 
   void  Update(double time_elapsed);
 

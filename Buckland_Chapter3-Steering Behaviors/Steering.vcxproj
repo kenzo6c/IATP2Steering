@@ -170,6 +170,7 @@
     <ClInclude Include="constants.h" />
     <ClInclude Include="EntityFunctionTemplates.h" />
     <ClInclude Include="GameWorld.h" />
+    <ClInclude Include="AgentPoursuiveur.h" />
     <ClInclude Include="MovingEntity.h" />
     <ClInclude Include="Obstacle.h" />
     <ClInclude Include="ParamLoader.h" />

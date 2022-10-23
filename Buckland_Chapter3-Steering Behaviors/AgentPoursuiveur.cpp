@@ -12,8 +12,19 @@ AgentPoursuiveur::AgentPoursuiveur(GameWorld* world,
     double    max_turn_rate,
     double    scale,
     Vehicle* nextVehicle,
-    Vector2D offset) : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale) 
+    Vector2D offset) : Vehicle(world, position, rotation, velocity, mass, max_force, max_speed, max_turn_rate, scale), m_offset(offset)
 {
     Steering()->OffsetPursuitOn(nextVehicle, offset);
 }
 
+void AgentPoursuiveur::Free()
+{
+    Steering()->OffsetPursuitOff();
+    Steering()->WanderOn();
+}
+
+void AgentPoursuiveur::ProtectLeader(Vehicle* nextVehicle)
+{
+    Steering()->WanderOff();
+    Steering()->OffsetPursuitOn(nextVehicle, m_offset);
+}

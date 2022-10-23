@@ -140,6 +140,9 @@
     <ClInclude Include="AgentLeader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AgentPoursuiveur.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Script1.rc">

@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Vehicle.h"
 #include "ParamLoader.h"
 #include "SteeringBehaviors.h"
@@ -19,7 +21,10 @@ public:
         Vehicle* nextVehicle,
         Vector2D offset);
 
+    void Free();
+
+    void AgentPoursuiveur::ProtectLeader(Vehicle* nextVehicle);
+
 private:
-    vector<Vehicle*> m_vehicles;
-    GameWorld* gameWorld;
+    Vector2D m_offset;
 };

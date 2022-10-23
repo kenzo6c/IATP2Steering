@@ -87,45 +87,11 @@ GameWorld::GameWorld(int cx, int cy):
     //add it to the cell subdivision
     m_pCellSpace->AddEntity(pVehicle);
   }
-
-  //setup the protecting agents
-  int numProtectingAgents = 20;
-  for (int a = 0; a < numProtectingAgents; ++a)
-  {
-      double angle = (TwoPi / numProtectingAgents) * a;
-      double radius = 50;
-
-      //float = f
-      //determine a random starting position
-      Vector2D SpawnPos = Vector2D(300, 300);
-
-      AgentPoursuiveur* pVehicle = new AgentPoursuiveur(this,
-          Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0),                         //initial position
-          RandFloat() * TwoPi,              //start rotation
-          Vector2D(0, 0),                   //velocity
-          0.2,                              //mass
-          Prm.MaxSteeringForce,             //max force
-          Prm.MaxSpeed,                     //max velocity
-          Prm.MaxTurnRatePerSecond,         //max turn rate
-          Prm.VehicleScale,                 //scale
-          (Vehicle*) m_worldAgentLeader,    //aimed vehicle
-          Vector2D(std::cos(angle) * radius, std::sin(angle) * radius));                //offset
-      v = (Vehicle*)pVehicle;
-
-      m_Vehicles.push_back(pVehicle);
-
-      //add it to the cell subdivision
-      m_pCellSpace->AddEntity(pVehicle);
-  }
-
  
   //create any obstacles or walls
   //CreateObstacles();
   //CreateWalls();
 }
-
-
-
 
 //-------------------------------- dtor ----------------------------------
 //------------------------------------------------------------------------
@@ -144,6 +110,71 @@ GameWorld::~GameWorld()
   delete m_pCellSpace;
   
   delete m_pPath;
+}
+
+
+void GameWorld::ChangeControl()
+{
+    m_worldAgentLeader->ChangeControl();
+    if (m_bControllable)
+    {
+        if (!m_bProtectingAgentsCreated)
+        {
+            CreateProtectingAgents();
+            m_bProtectingAgentsCreated = true;
+        }
+        else
+        {
+            for (int i = 0; i < m_ProtectingAgents.size(); i++)
+            {
+                m_ProtectingAgents[i]->ProtectLeader(m_worldAgentLeader);
+            }
+        }
+    }
+    else
+    {
+        if (m_bProtectingAgentsCreated)
+        {
+            for (int i = 0; i < m_ProtectingAgents.size(); i++)
+            {
+                m_ProtectingAgents[i]->Free();
+            }
+        }
+    }
+}
+
+
+void GameWorld::CreateProtectingAgents()
+{
+    //setup the protecting agents
+    int numProtectingAgents = 20;
+    for (int a = 0; a < numProtectingAgents; ++a)
+    {
+        double angle = (TwoPi / numProtectingAgents) * a;
+        double radius = 50;
+
+        //float = f
+        //determine a random starting position
+        Vector2D SpawnPos = Vector2D(300, 300);
+
+        AgentPoursuiveur* pVehicle = new AgentPoursuiveur(this,
+            SpawnPos,                         //initial position
+            RandFloat() * TwoPi,              //start rotation
+            Vector2D(0, 0),                   //velocity
+            0.2,                              //mass
+            Prm.MaxSteeringForce,             //max force
+            Prm.MaxSpeed,                     //max velocity
+            Prm.MaxTurnRatePerSecond,         //max turn rate
+            Prm.VehicleScale,                 //scale
+            (Vehicle*)m_worldAgentLeader,    //aimed vehicle
+            Vector2D(std::cos(angle) * radius, std::sin(angle) * radius));                //offset
+
+        m_Vehicles.push_back(pVehicle);
+        m_ProtectingAgents.push_back(pVehicle);
+
+        //add it to the cell subdivision
+        m_pCellSpace->AddEntity(pVehicle);
+    }
 }
 
 
@@ -544,7 +575,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
           if (m_bControllable)
           {
-              m_worldAgentLeader->ChangeControl();
+              ChangeControl();
 
               //check the menu
               ChangeMenuState(hwnd, ID_CONTROLLABLE, MFS_CHECKED);
@@ -552,7 +583,7 @@ void GameWorld::HandleMenuItems(WPARAM wParam, HWND hwnd)
 
           else
           {
-              m_worldAgentLeader->ChangeControl();
+              ChangeControl();
 
               //uncheck the menu
               ChangeMenuState(hwnd, ID_CONTROLLABLE, MFS_UNCHECKED);

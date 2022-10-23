@@ -125,7 +125,7 @@ LRESULT CALLBACK WindowProc (HWND   hwnd,
 
           case 'C':
           {
-              g_GameWorld->getAgentLeader()->ChangeControl();
+              g_GameWorld->ChangeControl();
           }
 
             break;
