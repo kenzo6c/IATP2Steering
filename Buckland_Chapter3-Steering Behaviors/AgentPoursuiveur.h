@@ -23,7 +23,7 @@ public:
 
     void Free();
 
-    void AgentPoursuiveur::ProtectLeader(Vehicle* nextVehicle);
+    void FollowVehicle(Vehicle* nextVehicle);
 
 private:
     Vector2D m_offset;

@@ -23,8 +23,9 @@ void AgentPoursuiveur::Free()
     Steering()->WanderOn();
 }
 
-void AgentPoursuiveur::ProtectLeader(Vehicle* nextVehicle)
+void AgentPoursuiveur::FollowVehicle(Vehicle* nextVehicle)
 {
     Steering()->WanderOff();
+    Steering()->OffsetPursuitOff();
     Steering()->OffsetPursuitOn(nextVehicle, m_offset);
 }

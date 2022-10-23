@@ -83,6 +83,7 @@ GameWorld::GameWorld(int cx, int cy):
     v = (Vehicle*)pVehicle;
 
     m_Vehicles.push_back(pVehicle);
+    m_FollowingAgents.push_back(pVehicle);
 
     //add it to the cell subdivision
     m_pCellSpace->AddEntity(pVehicle);
@@ -127,7 +128,7 @@ void GameWorld::ChangeControl()
         {
             for (int i = 0; i < m_ProtectingAgents.size(); i++)
             {
-                m_ProtectingAgents[i]->ProtectLeader(m_worldAgentLeader);
+                m_ProtectingAgents[i]->FollowVehicle(m_worldAgentLeader);
             }
         }
     }
