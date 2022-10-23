@@ -12,6 +12,7 @@
 #include "misc/WindowUtils.h"
 #include "misc/Stream_Utility_Functions.h"
 #include "AgentLeader.h"
+#include "AgentPoursuiveur.h"
 
 
 #include "resource.h"
@@ -49,17 +50,24 @@ GameWorld::GameWorld(int cx, int cy):
 
   double border = 30;
   m_pPath = new Path(5, border, border, cx-border, cy-border, true); 
+#define SHOAL
+#ifdef SHOAL
+
+  m_worldAgentLeader = new AgentLeader(this, Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0), m_bControllable);
+  m_Vehicles.push_back((Vehicle*)m_worldAgentLeader);
+#endif
+
+  Vehicle* v = (Vehicle*)m_worldAgentLeader;
 
   //setup the agents
   for (int a=0; a<Prm.NumAgents - 1; ++a)
   {
 
     //determine a random starting position
-    Vector2D SpawnPos = Vector2D(cx/2.0+RandomClamped()*cx/2.0,
-                                 cy/2.0+RandomClamped()*cy/2.0);
+    Vector2D SpawnPos = Vector2D(200,200);
 
 
-    Vehicle* pVehicle = new Vehicle(this,
+    /*Vehicle* pVehicle = new Vehicle(this,
                                     SpawnPos,                 //initial position
                                     RandFloat()*TwoPi,        //start rotation
                                     Vector2D(0,0),            //velocity
@@ -67,36 +75,29 @@ GameWorld::GameWorld(int cx, int cy):
                                     Prm.MaxSteeringForce,     //max force
                                     Prm.MaxSpeed,             //max velocity
                                     Prm.MaxTurnRatePerSecond, //max turn rate
-                                    Prm.VehicleScale);        //scale
+                                    Prm.VehicleScale);        //scale*/
+
+
+    AgentPoursuiveur* pVehicle = new AgentPoursuiveur(this,
+        SpawnPos,                 //initial position
+        RandFloat() * TwoPi,        //start rotation
+        Vector2D(0, 0),            //velocity
+        0.2,          //mass
+        Prm.MaxSteeringForce,     //max force
+        Prm.MaxSpeed,             //max velocity
+        Prm.MaxTurnRatePerSecond, //max turn rate
+        Prm.VehicleScale, v);        //scale
+
+    v = (Vehicle*)pVehicle;
 
     //pVehicle->Steering()->FlockingOn();
 
     m_Vehicles.push_back(pVehicle);
-    pVehicle->SetMaxSpeed(200);
 
     //add it to the cell subdivision
     m_pCellSpace->AddEntity(pVehicle);
   }
 
-
-#define SHOAL
-#ifdef SHOAL
-
-  m_worldAgentLeader = new AgentLeader(this, Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0), m_bControllable);
-  m_Vehicles.push_back((Vehicle *) m_worldAgentLeader);
-
-   for (int i=0; i<Prm.NumAgents-1; ++i)
-  {
-       if (i % 2)
-       {
-           m_Vehicles[i]->Steering()->OffsetPursuitOn(m_Vehicles[Prm.NumAgents - 1], Vector2D(-i - 1, i + 1));
-       }
-       else {
-           m_Vehicles[i]->Steering()->OffsetPursuitOn(m_Vehicles[Prm.NumAgents - 1], Vector2D(-i - 1, -i - 1));
-       }
-
-  }
-#endif
  
   //create any obstacles or walls
   //CreateObstacles();
