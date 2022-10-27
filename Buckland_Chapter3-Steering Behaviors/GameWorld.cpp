@@ -69,7 +69,7 @@ GameWorld::GameWorld(int cx, int cy):
   {
 
     //determine a random starting position
-    Vector2D SpawnPos = Vector2D(200,200);
+    Vector2D SpawnPos = Vector2D(cx / 2.0 + RandomClamped() * cx / 2.0, cy / 2.0 + RandomClamped() * cy / 2.0);
 
     AgentPoursuiveur* pVehicle = new AgentPoursuiveur(this,
         SpawnPos,                 //initial position
@@ -197,11 +197,13 @@ void GameWorld::CreateProtectingAgents()
     gdi->GreenPen();
     for (int a = 0; a < numProtectingAgents; ++a)
     {
+        // Calculation of the angle relatively to the number of agents protecting the leader
+        // so that they are all equally distributed around it.
         double angle = (TwoPi / numProtectingAgents) * a;
         double radius = 50;
 
         //float = f
-        //determine a random starting position
+        //get a starting position
         Vector2D SpawnPos = Vector2D(300, 300);
 
         AgentPoursuiveur* pVehicle = new AgentPoursuiveur(this,

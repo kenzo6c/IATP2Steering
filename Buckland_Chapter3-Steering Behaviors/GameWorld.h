@@ -39,7 +39,9 @@ private:
 
   //a container of all the moving entities
   std::vector<Vehicle*>         m_Vehicles;
+  //a container of all the following agents
   std::vector<AgentPoursuiveur*> m_FollowingAgents;
+  //a container of all the protecting agents
   std::vector<AgentPoursuiveur*> m_ProtectingAgents;
 
   //any obstacles
