@@ -4,9 +4,15 @@ Travail réalisé par Emile Veillette & Kenzo Carneiro.
 /!\ Comme dit au professeur, le build (debug comme release) ne fonctionne pas. Cela semble être un problème général de configuration.
 
 ---------- TRAVAIL RÉALISÉ ----------
-Dans ce devoir, nous avons réalisé toute la partie obligatoire (question 1 à 4).
+Dans ce devoir, nous avons réalisé toute la partie obligatoire (question 1 à 4) :
+- Création d'une classe agent poursuiveur à partir de l'algorithme de poursuite en offset présent dans le projet pour créer une file indienne d'agents poursuiveurs.
+- Création d'une classe agent leader qui se déplace d'une manière aléatoire avec l'algorithme d'itinérance (wandering) présent dans le projet.
+- Création d'un groupe de 20 agents-poursuiveurs qui suivent l'agent leader. On a donc une file indienne d'agents poursuiveurs derrière l'agent leader.
+- Possibilité pour le joueur-humain de prendre le contrôle de l'agent leader.
+- Modification de la formation des agents poursuiveurs lorsque le joueur-humain prend le contrôle de l'agent leader : les agents poursuiveurs se mettent autour du joueur pour le protéger.
 
-Bonus :
+
+Nous avons également programmé les bonus suivants :
 - Une partie de la question 5 : à partir du menu "Controls" que l'on a ajouté, vous pouvez :
 ---> Choisir la formation en V ou en file indienne
 ---> Choisir de contrôler ou non l'agent leader
